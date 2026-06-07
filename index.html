@@ -319,7 +319,7 @@ header p { font-size:11px; opacity:0.65; }
 }
 </style>
 <!-- OneSignal SDK -->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer=""></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
@@ -330,7 +330,7 @@ header p { font-size:11px; opacity:0.65; }
     });
   });
 </script>
-</head>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.es6.js?v=160605" defer=""></script></head>
 <body>
 
 <!-- LOGIN -->
@@ -351,21 +351,21 @@ header p { font-size:11px; opacity:0.65; }
     <div class="countdown-wrap">
       <div class="countdown-label">🚀 Prossimo aggiornamento</div>
       <div class="countdown-boxes">
-        <div class="cd-box"><span class="cd-num" id="cd-giorni">--</span><span class="cd-unit">Giorni</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-giorni">23</span><span class="cd-unit">Giorni</span></div>
         <div class="cd-sep">:</div>
-        <div class="cd-box"><span class="cd-num" id="cd-ore">--</span><span class="cd-unit">Ore</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-ore">05</span><span class="cd-unit">Ore</span></div>
         <div class="cd-sep">:</div>
-        <div class="cd-box"><span class="cd-num" id="cd-min">--</span><span class="cd-unit">Min</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-min">15</span><span class="cd-unit">Min</span></div>
         <div class="cd-sep">:</div>
-        <div class="cd-box"><span class="cd-num" id="cd-sec">--</span><span class="cd-unit">Sec</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-sec">55</span><span class="cd-unit">Sec</span></div>
       </div>
-      <div class="countdown-sub" id="cd-sub">Prezzi e calcolo automatico del totale 💶</div>
+      <div class="countdown-sub" id="cd-sub">🧮 Tenere il conto non sarà mai stato così facile...</div>
     </div>
   </div>
 </div>
 
 <!-- APP -->
-<div id="appScreen" style="display: none;">
+<div id="appScreen" style="display: block;">
   <div id="loadingOverlay"><div class="spinner"></div><p id="loadingMsg">Caricamento...</p></div>
 
   <div id="zoom" onclick="closeZoom()">
@@ -422,8 +422,8 @@ header p { font-size:11px; opacity:0.65; }
     <div class="header-top">
       <h1>🛒 Spesa Famiglia</h1>
       <div class="user-info">
-        <img class="user-avatar" id="userAvatar" src="" alt="">
-        <span class="user-name" id="userName"></span>
+        <img class="user-avatar" id="userAvatar" src="https://lh3.googleusercontent.com/a/ACg8ocJPeFoCvI4R81csBSxSw3BA7rROjsY0mgt61Ad5uWPgA5DJVA=s96-c" alt="">
+        <span class="user-name" id="userName">vincenzo</span>
         <button class="btn-logout" onclick="logout()">Esci</button>
       </div>
     </div>
@@ -431,7 +431,7 @@ header p { font-size:11px; opacity:0.65; }
       <span class="online-badge"><span class="online-dot"></span>In tempo reale</span>
       <div style="display:flex;align-items:center;gap:8px;">
         <span id="syncDot" style="font-size:11px;font-weight:700;opacity:0.85;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:20px;color:white;">☁️ Sync</span>
-        <button class="btn-urgenti" id="btnUrgenti" onclick="openUrgentiModal()" style="display:none;">🔴 Urgenti <span class="urg-count" id="urgBtnCount">0</span></button>
+        <button class="btn-urgenti" id="btnUrgenti" onclick="openUrgentiModal()" style="display: flex;">🔴 Urgenti <span class="urg-count" id="urgBtnCount">1</span></button>
       </div>
     </div>
   </header>
@@ -448,23 +448,56 @@ header p { font-size:11px; opacity:0.65; }
   <div class="prog-bar"><div class="prog-fill" id="progFill" style="width: 0%;"></div></div>
   <div class="count-row">
     <span>✅ <span id="doneCount">0</span> completati</span>
-    <span>🔴 <span id="urgCount">0</span> urgenti &nbsp;|&nbsp; Tot: <span id="totCount">0</span></span>
+    <span>🔴 <span id="urgCount">1</span> urgenti &nbsp;|&nbsp; Tot: <span id="totCount">1</span></span>
+    <button id="btnCountdown" onclick="toggleCountdownPopup()" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);border:none;border-radius:20px;color:white;font-size:10px;font-weight:800;padding:3px 10px;cursor:pointer;">🚀 Novità</button>
+  </div>
+
+  <!-- COUNTDOWN POPUP -->
+  <div id="countdownPopup" style="display:none;position:fixed;inset:0;z-index:7777;background:rgba(0,0,0,0.5);" onclick="toggleCountdownPopup()">
+    <div onclick="event.stopPropagation()" style="position:absolute;bottom:140px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:380px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:22px;padding:22px 18px 18px;border:1.5px solid rgba(255,255,255,0.1);box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-size:12px;font-weight:800;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;">🚀 Prossimo aggiornamento</span>
+        <button onclick="toggleCountdownPopup()" style="background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:26px;height:26px;color:white;font-size:14px;cursor:pointer;">✕</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;align-items:center;">
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);">
+          <span id="cd-giorni2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;font-variant-numeric:tabular-nums;">23</span>
+          <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-top:4px;">Giorni</span>
+        </div>
+        <span style="font-size:20px;font-weight:900;color:#ffeaa7;opacity:0.5;margin-bottom:10px;">:</span>
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);">
+          <span id="cd-ore2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;font-variant-numeric:tabular-nums;">05</span>
+          <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-top:4px;">Ore</span>
+        </div>
+        <span style="font-size:20px;font-weight:900;color:#ffeaa7;opacity:0.5;margin-bottom:10px;">:</span>
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);">
+          <span id="cd-min2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;font-variant-numeric:tabular-nums;">15</span>
+          <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-top:4px;">Min</span>
+        </div>
+        <span style="font-size:20px;font-weight:900;color:#ffeaa7;opacity:0.5;margin-bottom:10px;">:</span>
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);">
+          <span id="cd-sec2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;font-variant-numeric:tabular-nums;">55</span>
+          <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-top:4px;">Sec</span>
+        </div>
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:12px;text-align:center;font-weight:600;">🧮 Tenere il conto non sarà mai stato così facile...</div>
+    </div>
   </div>
 
   <div class="tabs" id="tabsBar">
     <button class="tab active" data-i="0" onclick="showTab(0)">🏠 Casa <span class="badge" id="b0">0</span></button>
     <button class="tab" data-i="1" onclick="showTab(1)">👤 Persona <span class="badge" id="b1">0</span></button>
-    <button class="tab" data-i="2" onclick="showTab(2)">🛒 Alim. <span class="badge" id="b2">0</span></button>
+    <button class="tab" data-i="2" onclick="showTab(2)">🛒 Alim. <span class="badge" id="b2">1</span></button>
   </div>
 
-  <div class="panel active" id="panel-0"><ul id="list-0"></ul><button class="add-btn" onclick="addRow(0)">＋ Aggiungi voce</button></div>
-  <div class="panel" id="panel-1"><ul id="list-1"></ul><button class="add-btn" onclick="addRow(1)">＋ Aggiungi voce</button></div>
-  <div class="panel" id="panel-2"><ul id="list-2"></ul><button class="add-btn" onclick="addRow(2)">＋ Aggiungi voce</button></div>
+  <div class="panel active" id="panel-0"><ul id="list-0"><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 1..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 2..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 3..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 4..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 5..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li></ul><button class="add-btn" onclick="addRow(0)">＋ Aggiungi voce</button></div>
+  <div class="panel" id="panel-1"><ul id="list-1"><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 1..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 2..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 3..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 4..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 5..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li></ul><button class="add-btn" onclick="addRow(1)">＋ Aggiungi voce</button></div>
+  <div class="panel" id="panel-2"><ul id="list-2"><li class="item-row urgent"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 1..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x5</span><button class="qty-btn">+</button></div><button class="priority-btn urgent">🔴 Urgente</button></div><div class="item-author">aggiunto da VINCENZO · modificato da VINCENZO · urgente da VINCENZO · modificato da VINCENZO</div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 2..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div><div class="item-author">aggiunto da VINCENZO</div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 3..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 4..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 5..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 6..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li></ul><button class="add-btn" onclick="addRow(2)">＋ Aggiungi voce</button></div>
 
   <div class="all-view" id="allView">
     <div class="all-section"><div class="sec-title"><div class="dot" style="background:var(--casa)"></div>🏠 Casa</div><ul id="all-0"></ul></div>
     <div class="all-section"><div class="sec-title"><div class="dot" style="background:var(--persona)"></div>👤 Persona</div><ul id="all-1"></ul></div>
-    <div class="all-section"><div class="sec-title"><div class="dot" style="background:var(--alim)"></div>🛒 Alimentari</div><ul id="all-2"></ul></div>
+    <div class="all-section"><div class="sec-title"><div class="dot" style="background:var(--alim)"></div>🛒 Alimentari</div><ul id="all-2"><li class="item-row urgent"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 1..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x5</span><button class="qty-btn">+</button></div><button class="priority-btn urgent">🔴 Urgente</button></div><div class="item-author">aggiunto da VINCENZO · modificato da VINCENZO · urgente da VINCENZO · modificato da VINCENZO</div></li></ul></div>
   </div>
 
   <div class="bottom-bar">
@@ -1150,6 +1183,15 @@ importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 // Registra SW e inizializza OneSignal
 registraServiceWorker();
 
+// ── COUNTDOWN POPUP ────────────────────────────────
+window.toggleCountdownPopup = function() {
+  const popup = document.getElementById('countdownPopup');
+  if (!popup) return;
+  const isOpen = popup.style.display !== 'none';
+  popup.style.display = isOpen ? 'none' : 'flex';
+  if (!isOpen) aggiornaCountdown2();
+};
+
 // ── COUNTDOWN ──────────────────────────────────────
 const TARGET_DATE = new Date('2026-07-01T00:00:00');
 function pad2(n) { return String(n).padStart(2,'0'); }
@@ -1171,8 +1213,29 @@ function aggiornaCountdown() {
   const dm=document.getElementById('cd-min');    if(dm) dm.textContent=pad2(m);
   const ds=document.getElementById('cd-sec');    if(ds) ds.textContent=pad2(s);
 }
+function aggiornaCountdown2() {
+  const ora = new Date();
+  const diff = TARGET_DATE - ora;
+  if (diff <= 0) {
+    ['cd-giorni2','cd-ore2','cd-min2','cd-sec2'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent='00'; });
+    return;
+  }
+  const g = Math.floor(diff / 86400000);
+  const o = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const dg=document.getElementById('cd-giorni2'); if(dg) dg.textContent=pad2(g);
+  const do_=document.getElementById('cd-ore2');   if(do_) do_.textContent=pad2(o);
+  const dm=document.getElementById('cd-min2');    if(dm) dm.textContent=pad2(m);
+  const ds2=document.getElementById('cd-sec2');   if(ds2) ds2.textContent=pad2(s);
+}
 aggiornaCountdown();
-setInterval(aggiornaCountdown, 1000);
+setInterval(() => { aggiornaCountdown(); aggiornaCountdown2(); }, 1000);
+// Hide button after July 1st
+if (new Date() >= TARGET_DATE) {
+  const btn = document.getElementById('btnCountdown');
+  if (btn) btn.style.display = 'none';
+}
 </script>
 
 </body></html>
