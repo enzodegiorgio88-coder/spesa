@@ -19,6 +19,9 @@ export let currentUserName = '';
 let skipNextUpdate = false;
 let saveTimeout = null;
 
+// **Variabile globale per il nome del DB/nodo**
+let currentDbName = 'spesa_test';
+
 // Mappa email → nome
 const NAME_MAP = {
   'vdegiorgio695@gmail.com': 'VINCENZO',
@@ -58,8 +61,10 @@ export function ensureRows(col) {
 // ------------------------------------------------------
 export function startListening() {
   const urlParams = new URLSearchParams(window.location.search);
-const dbName = urlParams.get('db') || 'spesa_test';
-const spesaRef = ref(db, dbName);
+  const dbName = urlParams.get('db') || 'spesa_test';
+  currentDbName = dbName;               // <- assegna qui il nome corrente
+  console.log('Firebase listening on node:', currentDbName);
+  const spesaRef = ref(db, dbName);
 
   onValue(spesaRef, snapshot => {
 
@@ -116,7 +121,9 @@ export function saveToFirebase() {
         price: r.price || ''
       })));
 
-      await set(ref(db, 'spesa_test'), clean);
+      // usa la variabile globale currentDbName per scrivere sul nodo corretto
+      console.log('Saving to Firebase node:', currentDbName);
+      await set(ref(db, currentDbName), clean);
       setSynced(true);
 
     } catch (e) {
