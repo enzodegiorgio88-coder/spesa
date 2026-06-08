@@ -57,7 +57,9 @@ export function ensureRows(col) {
 // LISTENER FIREBASE
 // ------------------------------------------------------
 export function startListening() {
-  const spesaRef = ref(db, 'spesa_test');
+  const urlParams = new URLSearchParams(window.location.search);
+const dbName = urlParams.get('db') || 'spesa_test';
+const spesaRef = ref(db, dbName);
 
   onValue(spesaRef, snapshot => {
 
