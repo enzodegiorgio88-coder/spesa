@@ -541,3 +541,242 @@ window.toggleCountdownPopup = function () {
 // COUNTDOWN
 // ------------------------------------------------------
 const TARGET_DATE = new Date('202
+                       const TARGET_DATE = new Date('2026-07-01T00:00:00');
+
+function aggiornaCountdown2() {
+  const now = new Date();
+  const diff = TARGET_DATE - now;
+
+  if (diff <= 0) {
+    document.getElementById('countdownPopup').style.display = 'none';
+    return;
+  }
+
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+
+  document.getElementById('cd2d').textContent = d;
+  document.getElementById('cd2h').textContent = h;
+  document.getElementById('cd2m').textContent = m;
+  document.getElementById('cd2s').textContent = s;
+
+  setTimeout(aggiornaCountdown2, 1000);
+}
+
+/* =========================================================
+   SCHERMATA NOVITÀ + TOUR GUIDATO (DA AGGIUNGERE QUI)
+========================================================= */
+
+const NOVITA_KEY = "novita_v4_prezzi_test";
+const NOVITA_RELEASE = new Date("2026-07-01T00:00:00");
+
+window.controllaNovita = function () {
+  const ora = new Date();
+  if (ora < NOVITA_RELEASE) return;
+
+  const visto = localStorage.getItem(NOVITA_KEY);
+  if (visto) return;
+
+  creaConfetti();
+  document.getElementById("novitaScreen").classList.add("show");
+};
+
+window.chiudiNovita = function () {
+  localStorage.setItem(NOVITA_KEY, "1");
+  document.getElementById("novitaScreen").classList.remove("show");
+
+  setTimeout(() => {
+    if (typeof avviaTour === "function") avviaTour();
+  }, 450);
+};
+
+/* =========================================================
+   CONFETTI
+========================================================= */
+
+function creaConfetti() {
+  const container = document.getElementById("confettiContainer");
+  if (!container) return;
+
+  const colors = ["#fff", "#ffeaa7", "#fd79a8", "#74b9ff", "#55efc4", "#fdcb6e"];
+
+  for (let i = 0; i < 28; i++) {
+    const c = document.createElement("div");
+    c.className = "confetto";
+
+    c.style.cssText = `
+      left:${Math.random() * 100}%;
+      top:${Math.random() * 100}%;
+      background:${colors[Math.floor(Math.random() * colors.length)]};
+      width:${6 + Math.random() * 6}px;
+      height:${6 + Math.random() * 6}px;
+      animation-duration:${1.5 + Math.random() * 2}s;
+      animation-delay:${Math.random() * 2}s;
+      border-radius:${Math.random() > 0.5 ? "50%" : "2px"};
+    `;
+
+    container.appendChild(c);
+  }
+}
+
+/* =========================================================
+   TOUR GUIDATO
+========================================================= */
+
+const TOUR_STEPS = [
+  {
+    targetId: "totaleBar",
+    title: "📊 Barra del Totale",
+    desc: "Qui vedi il totale della spesa in tempo reale.",
+    arrowSide: "above"
+  },
+  {
+    targetSelector: ".price-wrap",
+    title: "💶 Prezzi",
+    desc: "Puoi inserire il prezzo di ogni articolo.",
+    arrowSide: "below"
+  },
+  {
+    targetId: "btnUrgenti",
+    title: "🔴 Urgenti",
+    desc: "Qui trovi tutti gli articoli urgenti.",
+    arrowSide: "above"
+  }
+];
+
+let tourStep = 0;
+let tourAnimating = false;
+
+window.avviaTour = function () {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  setTimeout(() => {
+    tourStep = 0;
+    document.getElementById("tourOverlay").classList.add("show");
+    renderTourStep(true);
+  }, 350);
+};
+
+function renderTourStep(first) {
+  if (tourAnimating) return;
+  tourAnimating = true;
+
+  const step = TOUR_STEPS[tourStep];
+  const total = TOUR_STEPS.length;
+
+  const bubble = document.getElementById("tourBubble");
+  const arrow = document.getElementById("tourArrow");
+
+  bubble.classList.remove("visible");
+  arrow.classList.remove("visible");
+
+  setTimeout(() => {
+    document.getElementById("tourBadge").textContent =
+      "Passo " + (tourStep + 1) + " di " + total;
+    document.getElementById("tourTitle").textContent = step.title;
+    document.getElementById("tourDesc").textContent = step.desc;
+    document.getElementById("tourNextBtn").textContent =
+      tourStep === total - 1 ? "Inizia! 🎉" : "Successivo →";
+
+    const dotsEl = document.getElementById("tourDots");
+    dotsEl.innerHTML = "";
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement("div");
+      d.className = "tour-dot" + (i === tourStep ? " active" : "");
+      dotsEl.appendChild(d);
+    }
+
+    const target = step.targetId
+      ? document.getElementById(step.targetId)
+      : document.querySelector(step.targetSelector);
+
+    if (!target) {
+      tourAnimating = false;
+      window.tourNext();
+      return;
+    }
+
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    setTimeout(() => {
+      const rect = target.getBoundingClientRect();
+      const pad = 10;
+
+      const x = rect.left - pad;
+      const y = rect.top - pad;
+      const w = rect.width + pad * 2;
+      const h = rect.height + pad * 2;
+
+      const hole = document.getElementById("holeRect");
+      hole.setAttribute("x", x);
+      hole.setAttribute("y", y);
+      hole.setAttribute("width", w);
+      hole.setAttribute("height", h);
+
+      const midX = rect.left + rect.width / 2;
+
+      if (step.arrowSide === "above") {
+        arrow.textContent = "👆";
+        arrow.style.left = midX - 15 + "px";
+        arrow.style.top = rect.bottom + 6 + "px";
+
+        bubble.style.top = rect.bottom + 56 + "px";
+        bubble.style.left = midX - 160 + "px";
+      } else {
+        arrow.textContent = "👇";
+        arrow.style.left = midX - 15 + "px";
+        arrow.style.top = rect.top - 50 + "px";
+
+        bubble.style.top = rect.top - 200 + "px";
+        bubble.style.left = midX - 160 + "px";
+      }
+
+      requestAnimationFrame(() => {
+        bubble.classList.add("visible");
+        arrow.classList.add("visible");
+        tourAnimating = false;
+      });
+    }, 400);
+  }, first ? 50 : 300);
+}
+
+window.tourNext = function () {
+  if (tourAnimating) return;
+
+  if (tourStep >= TOUR_STEPS.length - 1) {
+    window.chiudiTour();
+    return;
+  }
+
+  tourStep++;
+  renderTourStep(false);
+};
+
+window.chiudiTour = function () {
+  const bubble = document.getElementById("tourBubble");
+  const arrow = document.getElementById("tourArrow");
+
+  bubble.classList.remove("visible");
+  arrow.classList.remove("visible");
+
+  setTimeout(() => {
+    document.getElementById("tourOverlay").classList.remove("show");
+
+    const hole = document.getElementById("holeRect");
+    if (hole) {
+      hole.setAttribute("width", "0");
+      hole.setAttribute("height", "0");
+    }
+  }, 300);
+};
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  controllaNovita();
+});
+      
