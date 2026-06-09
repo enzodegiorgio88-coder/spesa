@@ -540,8 +540,7 @@ window.toggleCountdownPopup = function () {
 // ------------------------------------------------------
 // COUNTDOWN
 // ------------------------------------------------------
-const TARGET_DATE = new Date('202
-                       const TARGET_DATE = new Date('2026-07-01T00:00:00');
+const TARGET_DATE = new Date('2026-07-01T00:00:00');
 
 function aggiornaCountdown2() {
   const now = new Date();
