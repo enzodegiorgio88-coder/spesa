@@ -2,7 +2,7 @@
 //  APP.JS — LOGICA DELLA LISTA SPESA
 // ======================================================
 
-import { auth, db } from "./auth.js";
+
 import { 
   ref, onValue, set 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -27,7 +27,7 @@ const NAME_MAP = {
   'giuliadegiorgio31@gmail.com': 'GIULIA'
 };
 
-export function getUserName(user) {
+
   if (!user) return '';
   return NAME_MAP[user.email] || user.displayName?.split(' ')[0].toUpperCase() || 'QUALCUNO';
 }
