@@ -254,6 +254,8 @@ header p { font-size:11px; opacity:0.65; }
       <span class="online-badge"><span class="online-dot"></span>In tempo reale</span>
       <div style="display:flex;align-items:center;gap:8px;">
         <span id="syncDot" style="font-size:11px;font-weight:700;opacity:0.85;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:20px;color:white;">☁️ Sync</span>
+        <span id="familyLabel" style="font-size:11px;font-weight:800;color:#ffeaa7;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:20px;"></span>
+        <button id="btnSwitchFamily" onclick="switchFamily()" style="display:none;background:linear-gradient(135deg,#6c5ce7,#a29bfe);border:none;border-radius:10px;color:white;font-size:11px;font-weight:800;padding:4px 10px;cursor:pointer;align-items:center;gap:4px;">⇄</button>
         <button class="btn-urgenti" id="btnUrgenti" onclick="openUrgentiModal()" style="display:none;">🔴 Urgenti <span class="urg-count" id="urgBtnCount">0</span></button>
       </div>
     </div>
@@ -350,25 +352,40 @@ let currentView = 'tab';
 let dbListener = null;
 let currentUserName = '';
 let currentFamilyId = '';
+let userFamilies = [];
+let currentFamilyIndex = 0;
 
 // ── MAPPA EMAIL → NOME ──────────────────────────────
 const NAME_MAP = {
-  'vdegiorgio695@gmail.com': 'VINCENZO',
-  'degiorfrancesca@gmail.com': 'FRANCESCA',
-  'lufrancy100@gmail.com': 'LUCIA',
-  'giuliadegiorgio31@gmail.com': 'GIULIA',
-  'martinadesimone19@gmail.com': 'MARTINA'
+  'vdegiorgio695@gmail.com':    'VINCENZO',
+  'degiorfrancesca@gmail.com':  'FRANCESCA',
+  'lufrancy100@gmail.com':      'LUCIA',
+  'giuliadegiorgio31@gmail.com':'GIULIA',
+  'martinadesimone19@gmail.com':'MARTINA',
+  'roby.hermy98@gmail.com':     'ROBERTA',
+  'caterina.fal28@gmail.com':   'CATERINA',
+  'giuliacarr@virgilio.it':     'GIULIA'
 };
 
-// ── MAPPA EMAIL → FAMIGLIA ──────────────────────────
-// Per aggiungere nuove email: aggiungi qui la riga con email e famiglia
+// ── MAPPA EMAIL → FAMIGLIA PREDEFINITA ─────────────
 const FAMILY_MAP = {
   'vdegiorgio695@gmail.com':    'famiglia_degiorgio',
   'degiorfrancesca@gmail.com':  'famiglia_degiorgio',
   'lufrancy100@gmail.com':      'famiglia_degiorgio',
   'giuliadegiorgio31@gmail.com':'famiglia_degiorgio',
-  'martinadesimone19@gmail.com':'famiglia_desimone'
-  // ← aggiungi qui le altre email della famiglia De Simone
+  'martinadesimone19@gmail.com':'famiglia_martina',   // lista solo sua (default)
+  'roby.hermy98@gmail.com':     'famiglia_desimone',
+  'caterina.fal28@gmail.com':   'famiglia_desimone',
+  'giuliacarr@virgilio.it':     'famiglia_desimone'
+};
+
+// ── UTENTI CON PIÙ FAMIGLIE ─────────────────────────
+// Martina può switchare tra la sua lista personale e il gruppo
+const USER_FAMILIES = {
+  'martinadesimone19@gmail.com': [
+    { id: 'famiglia_martina',  label: '👤 Solo mia' },
+    { id: 'famiglia_desimone', label: '👥 Gruppo'   }
+  ]
 };
 
 function getUserName(user) {
@@ -377,8 +394,46 @@ function getUserName(user) {
 }
 
 function getFamilyId(email) {
-  return FAMILY_MAP[email] || 'famiglia_' + email.split('@')[0];
+  const lowerEmail = email.toLowerCase();
+  const families = USER_FAMILIES[lowerEmail];
+  if (families) {
+    userFamilies = families;
+    const saved = localStorage.getItem('lastFamily_' + lowerEmail);
+    currentFamilyIndex = saved ? families.findIndex(f => f.id === saved) : 0;
+    if (currentFamilyIndex < 0) currentFamilyIndex = 0;
+    return families[currentFamilyIndex].id;
+  }
+  userFamilies = [];
+  return FAMILY_MAP[lowerEmail] || 'famiglia_' + lowerEmail.split('@')[0];
 }
+
+function updateFamilyButton() {
+  const btn = document.getElementById('btnSwitchFamily');
+  const lbl = document.getElementById('familyLabel');
+  if (!btn) return;
+  if (userFamilies.length > 1) {
+    btn.style.display = 'flex';
+    const otherIndex = (currentFamilyIndex + 1) % userFamilies.length;
+    btn.textContent = '⇄ ' + userFamilies[otherIndex].label;
+    if (lbl) lbl.textContent = userFamilies[currentFamilyIndex].label;
+  } else {
+    btn.style.display = 'none';
+    if (lbl) lbl.textContent = '';
+  }
+}
+
+window.switchFamily = () => {
+  if (userFamilies.length < 2) return;
+  currentFamilyIndex = (currentFamilyIndex + 1) % userFamilies.length;
+  currentFamilyId = userFamilies[currentFamilyIndex].id;
+  const email = auth.currentUser?.email?.toLowerCase();
+  if (email) localStorage.setItem('lastFamily_' + email, currentFamilyId);
+  updateFamilyButton();
+  if (dbListener) dbListener();
+  data = [[], [], []];
+  startListening();
+  showToast('📂 Sei in: ' + userFamilies[currentFamilyIndex].label);
+};
 
 let skipNextUpdate = false;
 let saveTimeout = null;
@@ -436,8 +491,9 @@ onAuthStateChanged(auth, user => {
     document.getElementById('userAvatar').src = user.photoURL || '';
     document.getElementById('userName').textContent = user.displayName?.split(' ')[0] || user.email;
     currentUserName = getUserName(user);
-    currentFamilyId = getFamilyId(user.email);
+    currentFamilyId = getFamilyId(user.email.toLowerCase());
     startListening();
+    updateFamilyButton();
     setTimeout(controllaNoviita, 800);
   } else {
     document.getElementById('loginScreen').style.display = 'flex';
