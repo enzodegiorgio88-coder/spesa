@@ -1044,7 +1044,7 @@ async function inviaNotificaUrgente(nomeArticolo, nomeUtente) {
       body: JSON.stringify({
         app_id: OS_APP_ID,
         included_segments: ['Total Subscriptions'],
-        headings: { it: ' Spesa Famiglia' },
+        headings: { it: '🛒 Spesa Famiglia' },
         contents: { it: '🔴 ' + nomeUtente + ' ha segnato "' + nomeArticolo + '" come urgente!' },
         url: 'https://spesa-famigliavincy.netlify.app',
       })
