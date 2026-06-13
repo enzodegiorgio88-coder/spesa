@@ -40,6 +40,11 @@ body { font-family: -apple-system,'Segoe UI',sans-serif; background: var(--bg); 
 .form-error { color: #d63031; font-size: 12px; font-weight: 700; margin-top: 8px; text-align: center; display: none; }
 .form-error.show { display: block; }
 #appScreen { display: none; padding-bottom: 120px; }
+.liste-bar { display:flex; gap:6px; padding:8px 16px 0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.liste-bar::-webkit-scrollbar { display:none; }
+.lista-chip { flex-shrink:0; display:flex; align-items:center; gap:5px; padding:6px 12px; border-radius:20px; border:2px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.1); color:white; font-family:inherit; font-size:12px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+.lista-chip.active { background:white; color:#2d3436; border-color:white; }
+.lista-chip .chip-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 header { background: linear-gradient(135deg,#2d3436,#636e72); color:white; padding:14px 16px 12px; position:sticky; top:0; z-index:100; box-shadow:0 4px 20px rgba(0,0,0,0.15); }
 .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
 .header-top h1 { font-size:18px; font-weight:800; }
@@ -293,11 +298,11 @@ header p { font-size:11px; opacity:0.65; }
       <span class="online-badge"><span class="online-dot"></span>In tempo reale</span>
       <div style="display:flex;align-items:center;gap:8px;">
         <span id="syncDot" style="font-size:11px;font-weight:700;opacity:0.85;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:20px;color:white;">☁️ Sync</span>
-        <span id="familyLabel" style="font-size:11px;font-weight:800;color:#ffeaa7;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:20px;"></span>
-        <button id="btnSwitchFamily" onclick="switchFamily()" style="display:none;background:linear-gradient(135deg,#6c5ce7,#a29bfe);border:none;border-radius:10px;color:white;font-size:11px;font-weight:800;padding:4px 10px;cursor:pointer;align-items:center;gap:4px;">⇄</button>
         <button class="btn-urgenti" id="btnUrgenti" onclick="openUrgentiModal()" style="display:none;">🔴 Urgenti <span class="urg-count" id="urgBtnCount">0</span></button>
       </div>
     </div>
+    <!-- BARRA LISTE -->
+    <div class="liste-bar" id="listeBar"></div>
   </header>
  
   <div id="totaleBar" style="display:none">
@@ -427,6 +432,7 @@ let currentUserName = '';
 let currentFamilyId = '';
 let userFamilies = [];
 let currentFamilyIndex = 0;
+let myListePrivate = []; // {id, nome} delle liste private di questo utente
  
 // ── MAPPA EMAIL → NOME ──────────────────────────────
 const NAME_MAP = {
@@ -465,6 +471,11 @@ const USER_FAMILIES = {
   ]
 };
  
+function isEmailInFamiglia(email) {
+  const lowerEmail = email.toLowerCase();
+  return !!(NAME_MAP[lowerEmail] || FAMILY_MAP[lowerEmail] || localStorage.getItem('pendingInvito'));
+}
+
 function getUserName(user) {
   if (!user) return '';
   return NAME_MAP[user.email] || user.displayName?.split(' ')[0].toUpperCase() || 'QUALCUNO';
@@ -499,6 +510,55 @@ function updateFamilyButton() {
   }
 }
  
+function renderListeBar() {
+  const bar = document.getElementById('listeBar');
+  if (!bar) return;
+  bar.innerHTML = '';
+  // Chip famiglia principale (sempre prima)
+  const mainId = getFamilyId(auth.currentUser?.email?.toLowerCase() || '');
+  const chip0 = document.createElement('button');
+  chip0.className = 'lista-chip' + (currentFamilyId === mainId ? ' active' : '');
+  chip0.innerHTML = '<span class="chip-dot" style="background:#ffeaa7"></span> 👥 Famiglia';
+  chip0.onclick = () => switchToList(mainId);
+  bar.appendChild(chip0);
+  // Chip liste private
+  myListePrivate.forEach(l => {
+    const chip = document.createElement('button');
+    chip.className = 'lista-chip' + (currentFamilyId === l.id ? ' active' : '');
+    chip.innerHTML = '<span class="chip-dot" style="background:#a29bfe"></span> 👤 ' + l.nome;
+    chip.onclick = () => switchToList(l.id);
+    bar.appendChild(chip);
+  });
+}
+
+window.switchToList = (familyId) => {
+  if (currentFamilyId === familyId) return;
+  currentFamilyId = familyId;
+  if (dbListener) dbListener();
+  data = [[], [], []];
+  startListening();
+  renderListeBar();
+  showToast('📂 Lista cambiata');
+};
+
+async function caricaListePrivate() {
+  const email = auth.currentUser?.email?.toLowerCase();
+  if (!email) return;
+  try {
+    const { ref: dbRef, get } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
+    const snap = await get(dbRef(db, 'inviti'));
+    if (!snap.exists()) return;
+    const tutti = snap.val();
+    myListePrivate = [];
+    Object.entries(tutti).forEach(([token, info]) => {
+      if (info.creatoreEmail && info.creatoreEmail.toLowerCase() === email && info.tipo === 'privato') {
+        myListePrivate.push({ id: token, nome: info.nome || 'Lista privata' });
+      }
+    });
+    renderListeBar();
+  } catch(e) { console.log('Errore carica liste:', e); }
+}
+
 window.switchFamily = () => {
   if (userFamilies.length < 2) return;
   currentFamilyIndex = (currentFamilyIndex + 1) % userFamilies.length;
@@ -653,19 +713,24 @@ onAuthStateChanged(auth, user => {
     if (pendingInvito) {
       localStorage.removeItem('pendingInvito');
       history.replaceState({}, '', window.location.pathname);
-      if (pendingInvito.startsWith('privato_')) {
-        // Lista privata: usa il token come familyId
-        currentFamilyId = pendingInvito;
-      } else {
-        // Invito famiglia: usa il familyId del link
-        currentFamilyId = pendingInvito;
-      }
+      currentFamilyId = pendingInvito;
+      document.getElementById('noAccessScreen').style.display = 'none';
+      startListening();
+      updateFamilyButton();
+      renderListeBar();
+      setTimeout(controllaNoviita, 800);
+    } else if (!isEmailInFamiglia(user.email)) {
+      // Email non in nessuna famiglia: mostra schermata no-access
+      document.getElementById('appScreen').style.display = 'none';
+      document.getElementById('noAccessScreen').style.display = 'flex';
+      currentUserName = getUserName(user);
     } else {
       currentFamilyId = getFamilyId(user.email.toLowerCase());
+      startListening();
+      updateFamilyButton();
+      caricaListePrivate();
+      setTimeout(controllaNoviita, 800);
     }
-    startListening();
-    updateFamilyButton();
-    setTimeout(controllaNoviita, 800);
   } else {
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('appScreen').style.display = 'none';
@@ -1359,6 +1424,14 @@ window.generaLink = async () => {
   document.getElementById('invitoRisultato').style.display = 'block';
   document.getElementById('btnGeneraLink').style.display = 'none';
   document.getElementById('btnCopiaLink').style.display = 'block';
+  // Aggiorna barra liste se lista privata
+  if (tipoInvito === 'privato') {
+    const nome = document.getElementById('invitoNome').value.trim();
+    if (!myListePrivate.find(l => l.id === token)) {
+      myListePrivate.push({ id: token, nome });
+    }
+    renderListeBar();
+  }
 };
 
 window.copiaLink = () => {
