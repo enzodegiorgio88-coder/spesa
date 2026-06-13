@@ -40,26 +40,6 @@ body { font-family: -apple-system,'Segoe UI',sans-serif; background: var(--bg); 
 .form-error { color: #d63031; font-size: 12px; font-weight: 700; margin-top: 8px; text-align: center; display: none; }
 .form-error.show { display: block; }
 #appScreen { display: none; padding-bottom: 120px; }
-.btn-tre-puntini { background:rgba(255,255,255,0.15); border:none; border-radius:10px; color:white; font-size:18px; font-weight:900; padding:4px 10px; cursor:pointer; line-height:1; }
-
-.menu-puntini-item { display:flex; align-items:center; gap:10px; padding:14px 18px; font-size:15px; font-weight:800; color:#2d3436; cursor:pointer; border:none; background:white; width:100%; font-family:inherit; text-align:left; }
-.menu-puntini-item:active { background:#f7f9fc; }
-#listeScreen { display:none; position:fixed; inset:0; background:#F7F9FC; z-index:9000; flex-direction:column; }
-#listeScreen.show { display:flex; }
-.liste-screen-header { background:linear-gradient(135deg,#2d3436,#636e72); color:white; padding:18px 16px 16px; display:flex; align-items:center; justify-content:space-between; }
-.liste-screen-header h2 { font-size:20px; font-weight:900; }
-.btn-close-liste { background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:36px; height:36px; color:white; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.liste-scroll { flex:1; overflow-y:auto; padding:16px; }
-.lista-card { background:white; border-radius:18px; padding:18px; margin-bottom:12px; box-shadow:0 2px 16px rgba(0,0,0,0.08); cursor:pointer; border:2.5px solid transparent; transition:all 0.2s; }
-.lista-card.active { border-color:#2d3436; box-shadow:0 4px 24px rgba(0,0,0,0.15); }
-.lista-card-top { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
-.lista-card-icon { width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
-.lista-card-info { flex:1; }
-.lista-card-name { font-size:17px; font-weight:900; color:#2d3436; }
-.lista-card-sub { font-size:12px; color:#b2bec3; font-weight:600; margin-top:2px; }
-.lista-card-members { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-.member-badge { background:#F7F9FC; border-radius:20px; padding:4px 10px; font-size:12px; font-weight:700; color:#636e72; }
-.member-badge.me { background:#2d3436; color:white; }
 header { background: linear-gradient(135deg,#2d3436,#636e72); color:white; padding:14px 16px 12px; position:sticky; top:0; z-index:100; box-shadow:0 4px 20px rgba(0,0,0,0.15); }
 .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
 .header-top h1 { font-size:18px; font-weight:800; }
@@ -200,10 +180,10 @@ header p { font-size:11px; opacity:0.65; }
     });
   });
 </script>
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.es6.js?v=160607" defer=""></script></head>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.es6.js?v=160607" defer=""></script><script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.es6.js?v=160607" defer=""></script><script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.es6.js?v=160607" defer=""></script></head>
 <body>
  
-<div id="loginScreen" style="display: none;">
+<div id="loginScreen" style="display: flex;">
   <h1>🛒 Spesa Famiglia</h1>
   <p>Lista della spesa condivisa in tempo reale</p>
   <div class="login-card">
@@ -247,18 +227,50 @@ header p { font-size:11px; opacity:0.65; }
       <div class="countdown-boxes">
         <div class="cd-box"><span class="cd-num" id="cd-giorni">17</span><span class="cd-unit">Giorni</span></div>
         <div class="cd-sep">:</div>
-        <div class="cd-box"><span class="cd-num" id="cd-ore">12</span><span class="cd-unit">Ore</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-ore">01</span><span class="cd-unit">Ore</span></div>
         <div class="cd-sep">:</div>
-        <div class="cd-box"><span class="cd-num" id="cd-min">48</span><span class="cd-unit">Min</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-min">01</span><span class="cd-unit">Min</span></div>
         <div class="cd-sep">:</div>
-        <div class="cd-box"><span class="cd-num" id="cd-sec">24</span><span class="cd-unit">Sec</span></div>
+        <div class="cd-box"><span class="cd-num" id="cd-sec">46</span><span class="cd-unit">Sec</span></div>
       </div>
       <div class="countdown-sub" id="cd-sub">🧮 Tenere il conto non sarà mai stato così facile...</div>
     </div>
   </div>
 </div>
  
-<div id="appScreen" style="display: block;">
+<div id="unknownScreen" style="display:none; position:fixed; inset:0; background:linear-gradient(135deg,#2d3436,#636e72); z-index:99999; align-items:center; justify-content:center; padding:24px; flex-direction:column;">
+  <div style="background:white; border-radius:24px; width:100%; max-width:380px; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#6c5ce7,#a29bfe); padding:28px 24px 24px; text-align:center;">
+      <div style="font-size:50px; margin-bottom:10px;">🔒</div>
+      <h2 style="color:white; font-size:22px; font-weight:900; margin-bottom:4px;">Iscriviti</h2>
+      <p style="color:rgba(255,255,255,0.85); font-size:14px; font-weight:700;">Non sei presente in nessuna delle liste</p>
+    </div>
+    <div style="padding:24px;">
+      <p style="font-size:13px; color:#636e72; line-height:1.7; margin-bottom:6px;">
+        L'email <strong id="unknownEmail" style="color:#2d3436;"></strong> non è associata a nessuna lista della famiglia.
+      </p>
+      <p style="font-size:12px; color:#b2bec3; line-height:1.6; margin-bottom:20px;">
+        Chiedi a un membro della famiglia di condividere un <strong>link di invito</strong> con te, oppure genera il tuo link qui sotto e inviagli quello.
+      </p>
+      <div id="unknownLinkResult" style="display:none; background:#f0fdf4; border:2px solid #00b894; border-radius:12px; padding:14px; margin-bottom:14px;">
+        <p style="font-size:11px; font-weight:800; color:#00b894; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">🔗 Link generato</p>
+        <p id="unknownLinkText" style="font-size:12px; font-weight:700; color:#2d3436; word-break:break-all; line-height:1.5; margin-bottom:8px;"></p>
+        <p style="font-size:12px; color:#636e72; font-weight:600;">Con questo link potrai entrare in una lista</p>
+      </div>
+      <button id="btnGenUnknown" onclick="generaLinkUnknown()" style="width:100%; padding:14px; border:none; border-radius:14px; background:linear-gradient(135deg,#00b894,#00cec9); color:white; font-family:inherit; font-weight:800; font-size:14px; cursor:pointer; margin-bottom:10px;">
+        🔗 Genera il tuo Link di Accesso
+      </button>
+      <button id="btnCopyUnknown" onclick="copiaLinkUnknown()" style="display:none; width:100%; padding:14px; border:none; border-radius:14px; background:linear-gradient(135deg,#25D366,#128C7E); color:white; font-family:inherit; font-weight:800; font-size:14px; cursor:pointer; margin-bottom:10px;">
+        📋 Copia e condividi su WhatsApp
+      </button>
+      <button onclick="logout()" style="width:100%; padding:12px; border:2px solid #eee; border-radius:14px; background:white; color:#b2bec3; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;">
+        ← Esci
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="appScreen" style="display: none;">
   <div id="loadingOverlay"><div class="spinner"></div><p id="loadingMsg">Caricamento...</p></div>
   <div id="zoom" onclick="closeZoom()"><img id="zoomImg" src="" alt=""><button id="zoom-close" onclick="closeZoom()">✕</button></div>
   <div id="copyModal" onclick="closeCopyModal(event)">
@@ -316,22 +328,8 @@ header p { font-size:11px; opacity:0.65; }
         <button class="btn-urgenti" id="btnUrgenti" onclick="openUrgentiModal()" style="display:none;">🔴 Urgenti <span class="urg-count" id="urgBtnCount">0</span></button>
       </div>
     </div>
-    <div style="margin-top:6px;position:relative;">
-      <button class="btn-tre-puntini" id="btnTrePuntini">⋯</button>
-      <div id="menuPuntini" style="display:none;position:absolute;top:36px;left:0;background:white;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.25);z-index:99999;min-width:180px;overflow:hidden;">
-        <button class="menu-puntini-item" id="itemListe">📂 Le mie liste</button>
-      </div>
-    </div>
   </header>
 
-  <!-- SCHERMATA LISTE -->
-  <div id="listeScreen">
-    <div class="liste-screen-header">
-      <h2>📂 Le mie liste</h2>
-      <button class="btn-close-liste" onclick="closeListeScreen()">✕</button>
-    </div>
-    <div class="liste-scroll" id="listeScroll"></div>
-  </div>
  
   <div id="totaleBar" style="display:none">
     <div>
@@ -356,11 +354,11 @@ header p { font-size:11px; opacity:0.65; }
       <div style="display:flex;gap:8px;justify-content:center;align-items:center;">
         <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);"><span id="cd-giorni2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;">17</span><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-top:4px;">Giorni</span></div>
         <span style="font-size:20px;font-weight:900;color:#ffeaa7;opacity:0.5;margin-bottom:10px;">:</span>
-        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);"><span id="cd-ore2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;">12</span><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-top:4px;">Ore</span></div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);"><span id="cd-ore2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;">01</span><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-top:4px;">Ore</span></div>
         <span style="font-size:20px;font-weight:900;color:#ffeaa7;opacity:0.5;margin-bottom:10px;">:</span>
-        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);"><span id="cd-min2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;">48</span><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-top:4px;">Min</span></div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);"><span id="cd-min2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;">01</span><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-top:4px;">Min</span></div>
         <span style="font-size:20px;font-weight:900;color:#ffeaa7;opacity:0.5;margin-bottom:10px;">:</span>
-        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);"><span id="cd-sec2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;">24</span><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-top:4px;">Sec</span></div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:14px;padding:10px 6px 8px;text-align:center;flex:1;border:1px solid rgba(255,255,255,0.1);"><span id="cd-sec2" style="font-size:28px;font-weight:900;color:#ffeaa7;display:block;">46</span><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;display:block;margin-top:4px;">Sec</span></div>
       </div>
       <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:12px;text-align:center;font-weight:600;">🧮 Tenere il conto non sarà mai stato così facile...</div>
     </div>
@@ -460,8 +458,7 @@ let currentUserName = '';
 let currentFamilyId = '';
 let userFamilies = [];
 let currentFamilyIndex = 0;
-let myListePrivate = []; // {id, nome} delle liste private di questo utente
- 
+
 // ── MAPPA EMAIL → NOME ──────────────────────────────
 const NAME_MAP = {
   'vdegiorgio695@gmail.com':    'VINCENZO',
@@ -499,10 +496,6 @@ const USER_FAMILIES = {
   ]
 };
  
-function isEmailInFamiglia(email) {
-  const lowerEmail = email.toLowerCase();
-  return !!(NAME_MAP[lowerEmail] || FAMILY_MAP[lowerEmail] || localStorage.getItem('pendingInvito'));
-}
 
 function getUserName(user) {
   if (!user) return '';
@@ -538,170 +531,8 @@ function updateFamilyButton() {
   }
 }
  
-function renderListeBar() {
-  // Non usata più, mantenuta per compatibilità
-}
 
-function buildMembers(familyId) {
-  // Mostra i membri noti di una famiglia
-  const members = [];
-  Object.entries(NAME_MAP).forEach(([email, nome]) => {
-    const fam = FAMILY_MAP[email] || ('famiglia_' + email.split('@')[0]);
-    if (fam === familyId) members.push(nome);
-  });
-  return members;
-}
 
-window.openListeScreen = () => {
-  const scroll = document.getElementById('listeScroll');
-  if (!scroll) return;
-  scroll.innerHTML = '';
-  const email = auth.currentUser?.email?.toLowerCase() || '';
-  const mainId = getFamilyId(email);
-
-  // ── Card famiglia principale ──
-  const members = buildMembers(mainId);
-  const card0 = document.createElement('div');
-  card0.className = 'lista-card' + (currentFamilyId === mainId ? ' active' : '');
-  card0.innerHTML = \`
-    <div class="lista-card-top">
-      <div class="lista-card-icon" style="background:#ffeaa740;">👥</div>
-      <div class="lista-card-info">
-        <div class="lista-card-name">Lista Famiglia</div>
-        <div class="lista-card-sub">\${members.length} \${members.length===1?'membro':'membri'} • Lista principale</div>
-      </div>
-      \${currentFamilyId === mainId ? '<span style="font-size:18px;">✅</span>' : ''}
-    </div>
-    <div class="lista-card-members">
-      \${members.map(m => \`<span class="member-badge\${m===currentUserName?' me':''}">\${m}</span>\`).join('')}
-    </div>\`;
-  card0.onclick = () => { switchToList(mainId); closeListeScreen(); };
-  scroll.appendChild(card0);
-
-  // ── Card liste private ──
-  if (myListePrivate.length > 0) {
-    const sep = document.createElement('div');
-    sep.style.cssText = 'font-size:11px;font-weight:800;color:#b2bec3;text-transform:uppercase;letter-spacing:1px;margin:16px 4px 8px;';
-    sep.textContent = 'Liste private';
-    scroll.appendChild(sep);
-  }
-
-  myListePrivate.forEach(l => {
-    const card = document.createElement('div');
-    card.className = 'lista-card' + (currentFamilyId === l.id ? ' active' : '');
-    card.innerHTML = \`
-      <div class="lista-card-top">
-        <div class="lista-card-icon" style="background:#a29bfe30;">👤</div>
-        <div class="lista-card-info">
-          <div class="lista-card-name">\${l.nome}</div>
-          <div class="lista-card-sub">Lista privata • Solo voi due</div>
-        </div>
-        \${currentFamilyId === l.id ? '<span style="font-size:18px;">✅</span>' : ''}
-      </div>
-      <div class="lista-card-members">
-        <span class="member-badge me">\${currentUserName}</span>
-        \${l.altroNome ? \`<span class="member-badge">\${l.altroNome}</span>\` : ''}
-      </div>\`;
-    card.onclick = () => { switchToList(l.id); closeListeScreen(); };
-    // Tasto elimina
-    const delBtn = document.createElement('button');
-    delBtn.style.cssText = 'display:block;width:100%;margin-top:12px;padding:10px;border:2px solid #ff7675;border-radius:10px;background:white;color:#ff7675;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;';
-    delBtn.textContent = '🗑 Elimina lista';
-    delBtn.onclick = (e) => { e.stopPropagation(); eliminaLista(l.id, l.nome); };
-    card.appendChild(delBtn);
-    scroll.appendChild(card);
-  });
-
-  document.getElementById('listeScreen').classList.add('show');
-};
-
-window.closeListeScreen = () => {
-  document.getElementById('listeScreen').classList.remove('show');
-};
-
-// Menu tre puntini — inizializzato dopo il DOM
-document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('btnTrePuntini');
-  const menu = document.getElementById('menuPuntini');
-  const itemListe = document.getElementById('itemListe');
-  if (!btn || !menu) return;
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-  });
-  itemListe.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menu.style.display = 'none';
-    openListeScreen();
-  });
-  document.addEventListener('click', () => {
-    menu.style.display = 'none';
-  });
-});
-window.toggleMenuPuntini = () => {}; // legacy, non usata
-
-window.eliminaLista = async (token, nome) => {
-  if (!confirm('Vuoi eliminare "' + nome + '"? I dati saranno persi.')) return;
-  try {
-    const { ref: dbRef, remove } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
-    await remove(dbRef(db, 'inviti/' + token));
-    await remove(dbRef(db, 'spesa/' + token));
-    myListePrivate = myListePrivate.filter(l => l.id !== token);
-    // Se stavo guardando quella lista, torna alla famiglia
-    if (currentFamilyId === token) {
-      const email = auth.currentUser?.email?.toLowerCase() || '';
-      currentFamilyId = getFamilyId(email);
-      if (dbListener) dbListener();
-      data = [[], [], []];
-      startListening();
-    }
-    showToast('🗑 Lista eliminata');
-    openListeScreen(); // aggiorna la schermata
-  } catch(e) {
-    showToast('❌ Errore eliminazione');
-  }
-};
-
-window.switchToList = (familyId) => {
-  if (currentFamilyId === familyId) return;
-  currentFamilyId = familyId;
-  if (dbListener) dbListener();
-  data = [[], [], []];
-  startListening();
-  renderListeBar();
-  showToast('📂 Lista cambiata');
-};
-
-async function caricaListePrivate() {
-  const email = auth.currentUser?.email?.toLowerCase();
-  if (!email) return;
-  try {
-    const { ref: dbRef, get } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
-    const snap = await get(dbRef(db, 'inviti'));
-    if (!snap.exists()) return;
-    const tutti = snap.val();
-    myListePrivate = [];
-    Object.entries(tutti).forEach(([token, info]) => {
-      if (info.creatoreEmail && info.creatoreEmail.toLowerCase() === email && info.tipo === 'privato') {
-        myListePrivate.push({ id: token, nome: info.nome || 'Lista privata' });
-      }
-    });
-    renderListeBar();
-  } catch(e) { console.log('Errore carica liste:', e); }
-}
-
-window.switchFamily = () => {
-  if (userFamilies.length < 2) return;
-  currentFamilyIndex = (currentFamilyIndex + 1) % userFamilies.length;
-  currentFamilyId = userFamilies[currentFamilyIndex].id;
-  const email = auth.currentUser?.email?.toLowerCase();
-  if (email) localStorage.setItem('lastFamily_' + email, currentFamilyId);
-  updateFamilyButton();
-  if (dbListener) dbListener();
-  data = [[], [], []];
-  startListening();
-  showToast('📂 Sei in: ' + userFamilies[currentFamilyIndex].label);
-};
  
 let skipNextUpdate = false;
 let saveTimeout = null;
@@ -834,37 +665,45 @@ window.logout = async () => {
  
 onAuthStateChanged(auth, user => {
   if (user) {
+    const emailLower = user.email.toLowerCase();
+    const pendingInvito = localStorage.getItem('pendingInvito');
+    const isKnown = NAME_MAP[emailLower] !== undefined || FAMILY_MAP[emailLower] !== undefined;
+
+    // Utente non in nessuna lista e nessun invito pendente → schermata dedicata
+    if (!isKnown && !pendingInvito) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('appScreen').style.display = 'none';
+      const us = document.getElementById('unknownScreen');
+      if (us) us.style.display = 'flex';
+      const ue = document.getElementById('unknownEmail');
+      if (ue) ue.textContent = user.email;
+      return;
+    }
+
     document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('unknownScreen').style.display = 'none';
     document.getElementById('appScreen').style.display = 'block';
     document.getElementById('userAvatar').src = user.photoURL || '';
     document.getElementById('userName').textContent = user.displayName?.split(' ')[0] || user.email;
     currentUserName = getUserName(user);
-    // Controlla se c'e un invito pendente
-    const pendingInvito = localStorage.getItem('pendingInvito');
+
     if (pendingInvito) {
       localStorage.removeItem('pendingInvito');
       history.replaceState({}, '', window.location.pathname);
       currentFamilyId = pendingInvito;
-      document.getElementById('noAccessScreen').style.display = 'none';
       startListening();
       updateFamilyButton();
-      renderListeBar();
       setTimeout(controllaNoviita, 800);
-    } else if (!isEmailInFamiglia(user.email)) {
-      // Email non in nessuna famiglia: mostra schermata no-access
-      document.getElementById('appScreen').style.display = 'none';
-      document.getElementById('noAccessScreen').style.display = 'flex';
-      currentUserName = getUserName(user);
     } else {
-      currentFamilyId = getFamilyId(user.email.toLowerCase());
+      currentFamilyId = getFamilyId(emailLower);
       startListening();
       updateFamilyButton();
-      caricaListePrivate();
       setTimeout(controllaNoviita, 800);
     }
   } else {
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('unknownScreen').style.display = 'none';
     data = [[], [], []];
   }
 });
@@ -1436,6 +1275,38 @@ async function registraServiceWorker() {
 }
 registraServiceWorker();
  
+// ── UTENTE SCONOSCIUTO ─────────────────────────────
+let _unknownLink = '';
+
+window.generaLinkUnknown = async () => {
+  const baseUrl = window.location.origin + window.location.pathname;
+  const rand = Math.random().toString(36).substring(2, 8);
+  const token = 'privato_' + rand;
+  _unknownLink = baseUrl + '?invito=' + token;
+  try {
+    await set(ref(db, 'inviti/' + token), {
+      creatore: auth.currentUser?.email || 'unknown',
+      creatoreEmail: auth.currentUser?.email || '',
+      famiglia: token,
+      nome: 'Lista di ' + (auth.currentUser?.email?.split('@')[0] || 'utente'),
+      tipo: 'privato',
+      creato: new Date().toISOString()
+    });
+  } catch(e) { console.log('Errore salvataggio invito:', e); }
+  document.getElementById('unknownLinkText').textContent = _unknownLink;
+  document.getElementById('unknownLinkResult').style.display = 'block';
+  document.getElementById('btnGenUnknown').style.display = 'none';
+  document.getElementById('btnCopyUnknown').style.display = 'block';
+};
+
+window.copiaLinkUnknown = () => {
+  if (!_unknownLink) return;
+  const testo = '🛒 Ciao! Ecco il mio link per entrare nella lista della spesa della famiglia:\n' + _unknownLink + '\n\nCon questo link potrò entrare in una lista!';
+  const done = () => showToast('✅ Link copiato! Incollalo su WhatsApp');
+  if (navigator.clipboard) navigator.clipboard.writeText(testo).then(done).catch(() => fbCopy(testo, done));
+  else fbCopy(testo, done);
+};
+
 // ── COUNTDOWN POPUP ────────────────────────────────
 window.toggleCountdownPopup = function() {
   const popup = document.getElementById('countdownPopup');
@@ -1555,14 +1426,6 @@ window.generaLink = async () => {
   document.getElementById('invitoRisultato').style.display = 'block';
   document.getElementById('btnGeneraLink').style.display = 'none';
   document.getElementById('btnCopiaLink').style.display = 'block';
-  // Aggiorna barra liste se lista privata
-  if (tipoInvito === 'privato') {
-    const nome = document.getElementById('invitoNome').value.trim();
-    if (!myListePrivate.find(l => l.id === token)) {
-      myListePrivate.push({ id: token, nome, altroNome: '' });
-    }
-    renderListeBar();
-  }
 };
 
 window.copiaLink = () => {
@@ -1591,5 +1454,6 @@ if (new Date() >= TARGET_DATE) {
 <div style="text-align:center;padding:12px 16px 140px;font-size:11px;color:#b2bec3;font-weight:600;letter-spacing:0.3px;">
   © Vincenzo De Giorgio — Creata il 17 maggio 2026 — Tutti i diritti riservati
 </div>
+
 
 </body></html>
