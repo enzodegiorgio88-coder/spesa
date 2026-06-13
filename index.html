@@ -182,7 +182,7 @@ header p { font-size:11px; opacity:0.65; }
 </script>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.es6.js?v=160607" defer=""></script></head>
 <body>
-
+ 
 <div id="loginScreen" style="display: none;">
   <h1>🛒 Spesa Famiglia</h1>
   <p>Lista della spesa condivisa in tempo reale</p>
@@ -198,11 +198,14 @@ header p { font-size:11px; opacity:0.65; }
       <button class="btn-google" style="background:#4B5EFC;border-color:#4B5EFC;color:white;margin-bottom:12px;" onclick="showEmailForm('virgilio')">
         ✉️ Accedi con Virgilio
       </button>
-      <button class="btn-google" style="background:#6001D2;border-color:#6001D2;color:white;" onclick="showEmailForm('yahoo')">
+      <button class="btn-google" style="background:#6001D2;border-color:#6001D2;color:white;margin-bottom:12px;" onclick="showEmailForm('yahoo')">
         🔶 Accedi con Yahoo
       </button>
+      <button class="btn-google" style="background:#E40046;border-color:#E40046;color:white;" onclick="showEmailForm('libero')">
+        📧 Accedi con Libero
+      </button>
     </div>
-
+ 
     <div class="login-form" id="emailForm">
       <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:var(--text);">Accedi con Email</h3>
       <div class="form-group">
@@ -217,7 +220,7 @@ header p { font-size:11px; opacity:0.65; }
       <button class="btn-submit" onclick="loginEmail()">Accedi</button>
       <button class="btn-back" onclick="hideEmailForm()">← Indietro</button>
     </div>
-
+ 
     <div class="login-note">Solo chi ha il link può accedere.<br>I tuoi dati sono al sicuro.</div>
     <div class="countdown-wrap">
       <div class="countdown-label">🚀 Prossimo aggiornamento</div>
@@ -234,7 +237,7 @@ header p { font-size:11px; opacity:0.65; }
     </div>
   </div>
 </div>
-
+ 
 <div id="appScreen" style="display: block;">
   <div id="loadingOverlay"><div class="spinner"></div><p id="loadingMsg">Caricamento...</p></div>
   <div id="zoom" onclick="closeZoom()"><img id="zoomImg" src="" alt=""><button id="zoom-close" onclick="closeZoom()">✕</button></div>
@@ -249,7 +252,7 @@ header p { font-size:11px; opacity:0.65; }
     </div>
   </div>
   <div id="toast"></div>
-
+ 
   <div id="novitaScreen">
     <div class="novita-card">
       <div class="novita-top">
@@ -266,7 +269,7 @@ header p { font-size:11px; opacity:0.65; }
       </div>
     </div>
   </div>
-
+ 
   <div id="urgentiModal" onclick="closeUrgentiModal(event)">
     <div class="urgenti-sheet" onclick="event.stopPropagation()">
       <div class="urgenti-header">
@@ -276,7 +279,7 @@ header p { font-size:11px; opacity:0.65; }
       <div class="urgenti-body" id="urgentiBody"></div>
     </div>
   </div>
-
+ 
   <header>
     <div class="header-top">
       <h1>🛒 Spesa Famiglia</h1>
@@ -296,7 +299,7 @@ header p { font-size:11px; opacity:0.65; }
       </div>
     </div>
   </header>
-
+ 
   <div id="totaleBar" style="display:none">
     <div>
       <div class="tot-label">💶 Totale spesa stimato</div>
@@ -310,7 +313,7 @@ header p { font-size:11px; opacity:0.65; }
     <span>🔴 <span id="urgCount">0</span> urgenti &nbsp;|&nbsp; Tot: <span id="totCount">0</span></span>
     <button id="btnCountdown" onclick="toggleCountdownPopup()" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);border:none;border-radius:20px;color:white;font-size:10px;font-weight:800;padding:3px 10px;cursor:pointer;">🚀 Novità</button>
   </div>
-
+ 
   <div id="countdownPopup" style="display:none;position:fixed;inset:0;z-index:7777;background:rgba(0,0,0,0.5);" onclick="toggleCountdownPopup()">
     <div onclick="event.stopPropagation()" style="position:absolute;bottom:140px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:380px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:22px;padding:22px 18px 18px;border:1.5px solid rgba(255,255,255,0.1);box-shadow:0 20px 60px rgba(0,0,0,0.4);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
@@ -329,23 +332,23 @@ header p { font-size:11px; opacity:0.65; }
       <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:12px;text-align:center;font-weight:600;">🧮 Tenere il conto non sarà mai stato così facile...</div>
     </div>
   </div>
-
+ 
   <div class="tabs" id="tabsBar">
     <button class="tab active" data-i="0" onclick="showTab(0)">🏠 Casa <span class="badge" id="b0">0</span></button>
     <button class="tab" data-i="1" onclick="showTab(1)">👤 Persona <span class="badge" id="b1">0</span></button>
     <button class="tab" data-i="2" onclick="showTab(2)">🛒 Alim. <span class="badge" id="b2">0</span></button>
   </div>
-
+ 
   <div class="panel active" id="panel-0"><ul id="list-0"><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 1..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 2..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 3..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 4..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 5..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li></ul><button class="add-btn" onclick="addRow(0)">＋ Aggiungi voce</button></div>
   <div class="panel" id="panel-1"><ul id="list-1"><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 1..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 2..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 3..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 4..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 5..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li></ul><button class="add-btn" onclick="addRow(1)">＋ Aggiungi voce</button></div>
   <div class="panel" id="panel-2"><ul id="list-2"><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 1..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 2..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 3..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 4..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li><li class="item-row"><div class="item-inner"><button class="chk"></button><div style="flex-shrink: 0;"><label><div class="photo-placeholder"><span>📷</span><span>foto</span></div><input type="file" accept="image/*" style="display: none;"></label></div><input type="text" class="item-input" placeholder="Articolo 5..."><button class="del-btn">✕</button></div><div class="item-extra"><div class="qty-wrap"><button class="qty-btn">−</button><span class="qty-val">x1</span><button class="qty-btn">+</button></div><button class="priority-btn">⚪ Normale</button></div></li></ul><button class="add-btn" onclick="addRow(2)">＋ Aggiungi voce</button></div>
-
+ 
   <div class="all-view" id="allView">
     <div class="all-section"><div class="sec-title"><div class="dot" style="background:var(--casa)"></div>🏠 Casa</div><ul id="all-0"></ul></div>
     <div class="all-section"><div class="sec-title"><div class="dot" style="background:var(--persona)"></div>👤 Persona</div><ul id="all-1"></ul></div>
     <div class="all-section"><div class="sec-title"><div class="dot" style="background:var(--alim)"></div>🛒 Alimentari</div><ul id="all-2"></ul></div>
   </div>
-
+ 
   <div class="bottom-bar">
     <button class="btn-view active" id="btnTab" onclick="setView('tab')">Per categoria</button>
     <button class="btn-view" id="btnAll" onclick="setView('all')">Tutto</button>
@@ -356,14 +359,14 @@ header p { font-size:11px; opacity:0.65; }
     </div>
   </div>
 </div>
-
+ 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getDatabase, ref, onValue, set }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+ 
 const firebaseConfig = {
   apiKey: "AIzaSyCIz9GPY5owaUibwPPSdo26VUOpU8oXMhI",
   authDomain: "spesa-68973.firebaseapp.com",
@@ -373,12 +376,12 @@ const firebaseConfig = {
   messagingSenderId: "39058140627",
   appId: "1:39058140627:web:81170db04b23a468de1326"
 };
-
+ 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 const provider = new GoogleAuthProvider();
-
+ 
 const LABELS = ['Casa','Persona','Alimentari'];
 const COLORS = ['#FF6B6B','#4ECDC4','#45B7D1'];
 const MIN_ROWS = 15;
@@ -390,7 +393,7 @@ let currentUserName = '';
 let currentFamilyId = '';
 let userFamilies = [];
 let currentFamilyIndex = 0;
-
+ 
 // ── MAPPA EMAIL → NOME ──────────────────────────────
 const NAME_MAP = {
   'vdegiorgio695@gmail.com':    'VINCENZO',
@@ -401,9 +404,10 @@ const NAME_MAP = {
   'roby.hermy98@gmail.com':     'ROBERTA',
   'caterina.fal28@gmail.com':   'CATERINA',
   'giuliacarr@virgilio.it':     'GIULIA',
-  'claudipag@yahoo.it':         'CLAUDI'
+  'claudipag@yahoo.it':         'CLAUDI',
+  'giovannalafratta@libero.it': 'GIOVANNA'
 };
-
+ 
 // ── MAPPA EMAIL → FAMIGLIA PREDEFINITA ─────────────
 const FAMILY_MAP = {
   'vdegiorgio695@gmail.com':    'famiglia_degiorgio',
@@ -414,10 +418,10 @@ const FAMILY_MAP = {
   'roby.hermy98@gmail.com':     'famiglia_desimone',
   'caterina.fal28@gmail.com':   'famiglia_desimone',
   'giuliacarr@virgilio.it':     'famiglia_desimone',
-  'claudipag@yahoo.it':         'famiglia_lafratta'
-  
+  'claudipag@yahoo.it':         'famiglia_lafratta',
+  'giovannalafratta@libero.it': 'famiglia_lafratta'
   };
-
+ 
 // ── UTENTI CON PIÙ FAMIGLIE ─────────────────────────
 // Martina può switchare tra la sua lista personale e il gruppo
 const USER_FAMILIES = {
@@ -426,12 +430,12 @@ const USER_FAMILIES = {
     { id: 'famiglia_desimone', label: '👤 Solo mia'   }
   ]
 };
-
+ 
 function getUserName(user) {
   if (!user) return '';
   return NAME_MAP[user.email] || user.displayName?.split(' ')[0].toUpperCase() || 'QUALCUNO';
 }
-
+ 
 function getFamilyId(email) {
   const lowerEmail = email.toLowerCase();
   const families = USER_FAMILIES[lowerEmail];
@@ -445,7 +449,7 @@ function getFamilyId(email) {
   userFamilies = [];
   return FAMILY_MAP[lowerEmail] || 'famiglia_' + lowerEmail.split('@')[0];
 }
-
+ 
 function updateFamilyButton() {
   const btn = document.getElementById('btnSwitchFamily');
   const lbl = document.getElementById('familyLabel');
@@ -460,7 +464,7 @@ function updateFamilyButton() {
     if (lbl) lbl.textContent = '';
   }
 }
-
+ 
 window.switchFamily = () => {
   if (userFamilies.length < 2) return;
   currentFamilyIndex = (currentFamilyIndex + 1) % userFamilies.length;
@@ -473,16 +477,16 @@ window.switchFamily = () => {
   startListening();
   showToast('📂 Sei in: ' + userFamilies[currentFamilyIndex].label);
 };
-
+ 
 let skipNextUpdate = false;
 let saveTimeout = null;
-
+ 
 function emptyRow() { return { text:'', done:false, photo:null, qty:1, urgent:false, author:'', lastAction:'', actions:[], price:'' }; }
-
+ 
 function ensureRows(col) {
   while (data[col].length < MIN_ROWS) data[col].push(emptyRow());
 }
-
+ 
 // ── AUTH ───────────────────────────────────────────
 window.loginGoogle = async () => {
   try {
@@ -500,10 +504,10 @@ window.loginGoogle = async () => {
     }
   }
 };
-
+ 
 // ── LOGIN EMAIL/PASSWORD ───────────────────────────
 let currentEmailProvider = '';
-
+ 
 window.showEmailForm = (provider) => {
   currentEmailProvider = provider;
   const buttons = document.getElementById('loginButtons');
@@ -512,6 +516,9 @@ window.showEmailForm = (provider) => {
   if (provider === 'virgilio') {
     h3.textContent = 'Accedi con Virgilio';
     document.getElementById('email').placeholder = 'tuaemail@virgilio.it';
+  } else if (provider === 'libero') {
+    h3.textContent = 'Accedi con Libero';
+    document.getElementById('email').placeholder = 'tuaemail@libero.it';
   } else {
     h3.textContent = 'Accedi con Yahoo';
     document.getElementById('email').placeholder = 'tuaemail@yahoo.it';
@@ -522,7 +529,7 @@ window.showEmailForm = (provider) => {
   buttons.style.display = 'none';
   form.classList.add('show');
 };
-
+ 
 window.hideEmailForm = () => {
   const buttons = document.getElementById('loginButtons');
   const form = document.getElementById('emailForm');
@@ -530,7 +537,7 @@ window.hideEmailForm = () => {
   form.classList.remove('show');
   document.getElementById('formError').classList.remove('show');
 };
-
+ 
 window.loginEmail = async () => {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
@@ -577,7 +584,7 @@ window.loginEmail = async () => {
     errorDiv.classList.add('show');
   }
 };
-
+ 
 async function handleRedirect() {
   try {
     const result = await getRedirectResult(auth);
@@ -593,13 +600,13 @@ async function handleRedirect() {
   }
 }
 handleRedirect();
-
+ 
 window.logout = async () => {
   if (!confirm('Vuoi uscire?')) return;
   if (dbListener) dbListener();
   await signOut(auth);
 };
-
+ 
 onAuthStateChanged(auth, user => {
   if (user) {
     document.getElementById('loginScreen').style.display = 'none';
@@ -617,7 +624,7 @@ onAuthStateChanged(auth, user => {
     data = [[], [], []];
   }
 });
-
+ 
 // ── FIREBASE REALTIME ──────────────────────────────
 function startListening() {
   const spesaRef = ref(db, 'spesa/' + currentFamilyId);
@@ -642,13 +649,13 @@ function startListening() {
     renderAll();
   });
 }
-
+ 
 function setSynced(ok) {
   const el = document.getElementById('syncDot');
   el.textContent = ok ? '☁️ Sync' : '🔄 Salvataggio...';
   el.style.opacity = ok ? '0.85' : '1';
 }
-
+ 
 function saveToFirebase() {
   setSynced(false);
   clearTimeout(saveTimeout);
@@ -669,7 +676,7 @@ function saveToFirebase() {
     }
   }, 600);
 }
-
+ 
 // ── COPIA WHATSAPP ─────────────────────────────────
 function buildListText() {
   const oggi = new Date().toLocaleDateString('it-IT');
@@ -696,33 +703,33 @@ function buildListText() {
   }
   return lines.join('\n');
 }
-
+ 
 window.openCopyModal = () => {
   const text = buildListText();
   if (!text) { showToast('⚠️ La lista è vuota!'); return; }
   document.getElementById('copyPreview').textContent = text;
   document.getElementById('copyModal').classList.add('show');
 };
-
+ 
 window.closeCopyModal = (e) => {
   if (!e || e.target === document.getElementById('copyModal'))
     document.getElementById('copyModal').classList.remove('show');
 };
-
+ 
 window.doCopy = () => {
   const text = document.getElementById('copyPreview').textContent;
   const done = () => { document.getElementById('copyModal').classList.remove('show'); showToast('✅ Lista copiata!'); };
   if (navigator.clipboard) navigator.clipboard.writeText(text).then(done).catch(() => fbCopy(text, done));
   else fbCopy(text, done);
 };
-
+ 
 function fbCopy(text, cb) {
   const ta = document.createElement('textarea');
   ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
   document.body.appendChild(ta); ta.select(); document.execCommand('copy');
   document.body.removeChild(ta); cb();
 }
-
+ 
 // ── SALVA IMMAGINE ─────────────────────────────────
 window.salvaImmagine = async () => {
   const sections = [];
@@ -820,7 +827,7 @@ window.salvaImmagine = async () => {
     showToast('❌ Errore, riprova');
   }
 };
-
+ 
 function rr(ctx,x,y,w,h,r) {
   ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
   ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
@@ -828,7 +835,7 @@ function rr(ctx,x,y,w,h,r) {
   ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
   ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
 }
-
+ 
 // ── RENDER ─────────────────────────────────────────
 function renderCol(col, listId) {
   const ul = document.getElementById(listId);
@@ -845,7 +852,7 @@ function renderCol(col, listId) {
     ul.appendChild(makeRow(col, i, item));
   });
 }
-
+ 
 function makeRow(col, i, item) {
   const li = document.createElement('li');
   li.className = 'item-row' + (item.urgent && !item.done ? ' urgent' : '');
@@ -975,12 +982,12 @@ function makeRow(col, i, item) {
   }
   return li;
 }
-
+ 
 function renderAll() {
   for (let c=0;c<3;c++) { renderCol(c,'list-'+c); renderCol(c,'all-'+c); }
   updateStats();
 }
-
+ 
 function updateStats() {
   const all = data.flat().filter(r=>r.text.trim()||r.photo);
   const done = all.filter(r=>r.done);
@@ -1011,7 +1018,7 @@ function updateStats() {
     urgBtn.style.display = 'none';
   }
 }
-
+ 
 function handlePhoto(col, i, e) {
   const file=e.target.files[0]; if(!file)return;
   const reader=new FileReader();
@@ -1029,16 +1036,16 @@ function handlePhoto(col, i, e) {
   };
   reader.readAsDataURL(file); e.target.value='';
 }
-
+ 
 window.openZoom=(src)=>{ document.getElementById('zoomImg').src=src; document.getElementById('zoom').classList.add('show'); };
 window.closeZoom=()=>document.getElementById('zoom').classList.remove('show');
-
+ 
 window.showTab=(i)=>{
   currentTab=i;
   document.querySelectorAll('.tab').forEach((t,ti)=>t.classList.toggle('active',ti===i));
   document.querySelectorAll('.panel').forEach((p,pi)=>p.classList.toggle('active',pi===i));
 };
-
+ 
 window.setView=(v)=>{
   currentView=v; const isTab=v==='tab';
   document.getElementById('tabsBar').style.display=isTab?'flex':'none';
@@ -1048,29 +1055,29 @@ window.setView=(v)=>{
   document.getElementById('btnAll').classList.toggle('active',!isTab);
   if(isTab) showTab(currentTab);
 };
-
+ 
 window.addRow=(col)=>{
   const r = emptyRow(); r.author = currentUserName; r.actions = ['aggiunto da ' + currentUserName]; r.lastAction = r.actions[0];
   data[col].push(r); saveToFirebase(); renderAll();
   setTimeout(()=>{ const inputs=document.querySelectorAll('#list-'+col+' .item-input'); const last=inputs[inputs.length-1]; if(last){last.focus();last.scrollIntoView({behavior:'smooth',block:'center'});} },60);
 };
-
+ 
 window.clearDone=()=>{
   if(!confirm('Rimuovere tutti gli articoli spuntati?'))return;
   for(let c=0;c<3;c++){data[c]=data[c].filter(r=>!r.done);ensureRows(c);}
   saveToFirebase(); renderAll();
 };
-
+ 
 function showToast(msg,dur){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),dur||2500);
 }
-
+ 
 // ── URGENTI MODAL ──────────────────────────────────
 const LABELS_URGENTI = ['🏠 Casa','👤 Persona','🛒 Alimentari'];
 const COLORS_URGENTI = ['#FF6B6B','#4ECDC4','#45B7D1'];
-
+ 
 window.openUrgentiModal = () => {
   const body = document.getElementById('urgentiBody');
   body.innerHTML = '';
@@ -1110,16 +1117,16 @@ window.openUrgentiModal = () => {
   document.getElementById('urgModalSub').textContent = totalUrg > 0 ? totalUrg + ' ' + (totalUrg === 1 ? 'articolo da prendere' : 'articoli da prendere') : 'Nessun urgente';
   document.getElementById('urgentiModal').classList.add('show');
 };
-
+ 
 window.closeUrgentiModal = (e) => {
   if (!e || e.target === document.getElementById('urgentiModal'))
     document.getElementById('urgentiModal').classList.remove('show');
 };
-
+ 
 // ── NOVITÀ SCREEN ──────────────────────────────────
 const NOVITA_KEY = 'novita_v4_prezzi_visto';
 const NOVITA_RELEASE = new Date('2026-07-01T00:00:00');
-
+ 
 function creaConfetti() {
   const container = document.getElementById('confettiContainer');
   if (!container) return;
@@ -1130,7 +1137,7 @@ function creaConfetti() {
     container.appendChild(c);
   }
 }
-
+ 
 function controllaNoviita() {
   const ora = new Date();
   if (ora < NOVITA_RELEASE) return;
@@ -1139,19 +1146,19 @@ function controllaNoviita() {
   creaConfetti();
   document.getElementById('novitaScreen').classList.add('show');
 }
-
+ 
 // ── ONESIGNAL NOTIFICHE ────────────────────────────
 const NOTIFICHE_RELEASE = new Date('2020-01-01T00:00:00');
 const OS_APP_ID = '6181803b-9cf7-494c-8a8a-d22c6584c065';
 const OS_API_URL = 'https://onesignal.com/api/v1/notifications';
-
+ 
 async function initNotifiche() {
   if (!window.OneSignal) return;
   try {
     await OneSignal.Notifications.requestPermission();
   } catch(e) { console.log('Notifiche non autorizzate'); }
 }
-
+ 
 async function inviaNotificaUrgente(nomeArticolo, nomeUtente) {
   try {
     await fetch(OS_API_URL, {
@@ -1167,13 +1174,13 @@ async function inviaNotificaUrgente(nomeArticolo, nomeUtente) {
     });
   } catch(e) { console.log('Notifica non inviata:', e); }
 }
-
+ 
 window.chiudiNovita = () => {
   localStorage.setItem(NOVITA_KEY, '1');
   document.getElementById('novitaScreen').classList.remove('show');
   setTimeout(initNotifiche, 500);
 };
-
+ 
 async function registraServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   try {
@@ -1184,7 +1191,7 @@ async function registraServiceWorker() {
   } catch(e) { console.log('SW non registrato:', e); }
 }
 registraServiceWorker();
-
+ 
 // ── COUNTDOWN POPUP ────────────────────────────────
 window.toggleCountdownPopup = function() {
   const popup = document.getElementById('countdownPopup');
@@ -1193,10 +1200,10 @@ window.toggleCountdownPopup = function() {
   popup.style.display = isOpen ? 'none' : 'flex';
   if (!isOpen) aggiornaCountdown2();
 };
-
+ 
 const TARGET_DATE = new Date('2026-07-01T00:00:00');
 function pad2(n) { return String(n).padStart(2,'0'); }
-
+ 
 function aggiornaCountdown() {
   const ora = new Date();
   const diff = TARGET_DATE - ora;
@@ -1213,7 +1220,7 @@ function aggiornaCountdown() {
   const dm=document.getElementById('cd-min');    if(dm) dm.textContent=pad2(m);
   const ds=document.getElementById('cd-sec');    if(ds) ds.textContent=pad2(s);
 }
-
+ 
 function aggiornaCountdown2() {
   const ora = new Date();
   const diff = TARGET_DATE - ora;
@@ -1228,14 +1235,14 @@ function aggiornaCountdown2() {
   const dm=document.getElementById('cd-min2');    if(dm) dm.textContent=pad2(m);
   const ds2=document.getElementById('cd-sec2');   if(ds2) ds2.textContent=pad2(s);
 }
-
+ 
 aggiornaCountdown();
 setInterval(() => { aggiornaCountdown(); aggiornaCountdown2(); }, 1000);
-
+ 
 if (new Date() >= TARGET_DATE) {
   const btn = document.getElementById('btnCountdown');
   if (btn) btn.style.display = 'none';
 }
 </script>
-
+ 
 </body></html>
