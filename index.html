@@ -41,8 +41,7 @@ body { font-family: -apple-system,'Segoe UI',sans-serif; background: var(--bg); 
 .form-error.show { display: block; }
 #appScreen { display: none; padding-bottom: 120px; }
 .btn-tre-puntini { background:rgba(255,255,255,0.15); border:none; border-radius:10px; color:white; font-size:18px; font-weight:900; padding:4px 10px; cursor:pointer; line-height:1; }
-#menuPuntini { display:none; position:fixed; top:60px; left:16px; background:white; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.18); z-index:9999; min-width:180px; overflow:hidden; }
-#menuPuntini.show { display:block; }
+
 .menu-puntini-item { display:flex; align-items:center; gap:10px; padding:14px 18px; font-size:15px; font-weight:800; color:#2d3436; cursor:pointer; border:none; background:white; width:100%; font-family:inherit; text-align:left; }
 .menu-puntini-item:active { background:#f7f9fc; }
 #listeScreen { display:none; position:fixed; inset:0; background:#F7F9FC; z-index:9000; flex-direction:column; }
@@ -317,15 +316,13 @@ header p { font-size:11px; opacity:0.65; }
         <button class="btn-urgenti" id="btnUrgenti" onclick="openUrgentiModal()" style="display:none;">🔴 Urgenti <span class="urg-count" id="urgBtnCount">0</span></button>
       </div>
     </div>
-    <div style="margin-top:6px;">
-      <button class="btn-tre-puntini" onclick="toggleMenuPuntini(event)">⋯</button>
+    <div style="margin-top:6px;position:relative;">
+      <button class="btn-tre-puntini" id="btnTrePuntini">⋯</button>
+      <div id="menuPuntini" style="display:none;position:absolute;top:36px;left:0;background:white;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.25);z-index:99999;min-width:180px;overflow:hidden;">
+        <button class="menu-puntini-item" id="itemListe">📂 Le mie liste</button>
+      </div>
     </div>
   </header>
-
-  <!-- MENU TRE PUNTINI -->
-  <div id="menuPuntini">
-    <button class="menu-puntini-item" onclick="document.getElementById('menuPuntini').classList.remove('show'); openListeScreen()">📂 Le mie liste</button>
-  </div>
 
   <!-- SCHERMATA LISTE -->
   <div id="listeScreen">
@@ -622,23 +619,26 @@ window.closeListeScreen = () => {
   document.getElementById('listeScreen').classList.remove('show');
 };
 
-window.toggleMenuPuntini = (e) => {
-  if (e) e.stopPropagation();
+// Menu tre puntini — inizializzato dopo il DOM
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btnTrePuntini');
   const menu = document.getElementById('menuPuntini');
-  const isOpen = menu.classList.contains('show');
-  if (isOpen) {
-    menu.classList.remove('show');
-  } else {
-    menu.classList.add('show');
-    // Chiudi se clicchi fuori, ma solo dopo che questo click è finito
-    setTimeout(() => {
-      document.addEventListener('click', function chiudi() {
-        menu.classList.remove('show');
-        document.removeEventListener('click', chiudi);
-      });
-    }, 10);
-  }
-};
+  const itemListe = document.getElementById('itemListe');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  });
+  itemListe.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menu.style.display = 'none';
+    openListeScreen();
+  });
+  document.addEventListener('click', () => {
+    menu.style.display = 'none';
+  });
+});
+window.toggleMenuPuntini = () => {}; // legacy, non usata
 
 window.eliminaLista = async (token, nome) => {
   if (!confirm('Vuoi eliminare "' + nome + '"? I dati saranno persi.')) return;
