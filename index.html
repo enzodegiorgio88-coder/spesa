@@ -324,7 +324,7 @@ header p { font-size:11px; opacity:0.65; }
 
   <!-- MENU TRE PUNTINI -->
   <div id="menuPuntini">
-    <button class="menu-puntini-item" onclick="toggleMenuPuntini(); openListeScreen()">📂 Le mie liste</button>
+    <button class="menu-puntini-item" onclick="document.getElementById('menuPuntini').classList.remove('show'); openListeScreen()">📂 Le mie liste</button>
   </div>
 
   <!-- SCHERMATA LISTE -->
@@ -625,14 +625,20 @@ window.closeListeScreen = () => {
 window.toggleMenuPuntini = (e) => {
   if (e) e.stopPropagation();
   const menu = document.getElementById('menuPuntini');
-  menu.classList.toggle('show');
+  const isOpen = menu.classList.contains('show');
+  if (isOpen) {
+    menu.classList.remove('show');
+  } else {
+    menu.classList.add('show');
+    // Chiudi se clicchi fuori, ma solo dopo che questo click è finito
+    setTimeout(() => {
+      document.addEventListener('click', function chiudi() {
+        menu.classList.remove('show');
+        document.removeEventListener('click', chiudi);
+      });
+    }, 10);
+  }
 };
-
-// Chiudi menu se clicchi fuori
-document.addEventListener('click', () => {
-  const menu = document.getElementById('menuPuntini');
-  if (menu) menu.classList.remove('show');
-});
 
 window.eliminaLista = async (token, nome) => {
   if (!confirm('Vuoi eliminare "' + nome + '"? I dati saranno persi.')) return;
