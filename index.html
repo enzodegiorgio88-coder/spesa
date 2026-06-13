@@ -40,11 +40,27 @@ body { font-family: -apple-system,'Segoe UI',sans-serif; background: var(--bg); 
 .form-error { color: #d63031; font-size: 12px; font-weight: 700; margin-top: 8px; text-align: center; display: none; }
 .form-error.show { display: block; }
 #appScreen { display: none; padding-bottom: 120px; }
-.liste-bar { display:flex; gap:6px; padding:8px 16px 0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
-.liste-bar::-webkit-scrollbar { display:none; }
-.lista-chip { flex-shrink:0; display:flex; align-items:center; gap:5px; padding:6px 12px; border-radius:20px; border:2px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.1); color:white; font-family:inherit; font-size:12px; font-weight:800; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-.lista-chip.active { background:white; color:#2d3436; border-color:white; }
-.lista-chip .chip-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.btn-tre-puntini { background:rgba(255,255,255,0.15); border:none; border-radius:10px; color:white; font-size:18px; font-weight:900; padding:4px 10px; cursor:pointer; line-height:1; }
+#menuPuntini { display:none; position:fixed; top:60px; left:16px; background:white; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.18); z-index:9999; min-width:180px; overflow:hidden; }
+#menuPuntini.show { display:block; }
+.menu-puntini-item { display:flex; align-items:center; gap:10px; padding:14px 18px; font-size:15px; font-weight:800; color:#2d3436; cursor:pointer; border:none; background:white; width:100%; font-family:inherit; text-align:left; }
+.menu-puntini-item:active { background:#f7f9fc; }
+#listeScreen { display:none; position:fixed; inset:0; background:#F7F9FC; z-index:9000; flex-direction:column; }
+#listeScreen.show { display:flex; }
+.liste-screen-header { background:linear-gradient(135deg,#2d3436,#636e72); color:white; padding:18px 16px 16px; display:flex; align-items:center; justify-content:space-between; }
+.liste-screen-header h2 { font-size:20px; font-weight:900; }
+.btn-close-liste { background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:36px; height:36px; color:white; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.liste-scroll { flex:1; overflow-y:auto; padding:16px; }
+.lista-card { background:white; border-radius:18px; padding:18px; margin-bottom:12px; box-shadow:0 2px 16px rgba(0,0,0,0.08); cursor:pointer; border:2.5px solid transparent; transition:all 0.2s; }
+.lista-card.active { border-color:#2d3436; box-shadow:0 4px 24px rgba(0,0,0,0.15); }
+.lista-card-top { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.lista-card-icon { width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.lista-card-info { flex:1; }
+.lista-card-name { font-size:17px; font-weight:900; color:#2d3436; }
+.lista-card-sub { font-size:12px; color:#b2bec3; font-weight:600; margin-top:2px; }
+.lista-card-members { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.member-badge { background:#F7F9FC; border-radius:20px; padding:4px 10px; font-size:12px; font-weight:700; color:#636e72; }
+.member-badge.me { background:#2d3436; color:white; }
 header { background: linear-gradient(135deg,#2d3436,#636e72); color:white; padding:14px 16px 12px; position:sticky; top:0; z-index:100; box-shadow:0 4px 20px rgba(0,0,0,0.15); }
 .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
 .header-top h1 { font-size:18px; font-weight:800; }
@@ -301,9 +317,24 @@ header p { font-size:11px; opacity:0.65; }
         <button class="btn-urgenti" id="btnUrgenti" onclick="openUrgentiModal()" style="display:none;">🔴 Urgenti <span class="urg-count" id="urgBtnCount">0</span></button>
       </div>
     </div>
-    <!-- BARRA LISTE -->
-    <div class="liste-bar" id="listeBar"></div>
+    <div style="margin-top:6px;">
+      <button class="btn-tre-puntini" onclick="toggleMenuPuntini(event)">⋯</button>
+    </div>
   </header>
+
+  <!-- MENU TRE PUNTINI -->
+  <div id="menuPuntini">
+    <button class="menu-puntini-item" onclick="toggleMenuPuntini(); openListeScreen()">📂 Le mie liste</button>
+  </div>
+
+  <!-- SCHERMATA LISTE -->
+  <div id="listeScreen">
+    <div class="liste-screen-header">
+      <h2>📂 Le mie liste</h2>
+      <button class="btn-close-liste" onclick="closeListeScreen()">✕</button>
+    </div>
+    <div class="liste-scroll" id="listeScroll"></div>
+  </div>
  
   <div id="totaleBar" style="display:none">
     <div>
@@ -511,25 +542,119 @@ function updateFamilyButton() {
 }
  
 function renderListeBar() {
-  const bar = document.getElementById('listeBar');
-  if (!bar) return;
-  bar.innerHTML = '';
-  // Chip famiglia principale (sempre prima)
-  const mainId = getFamilyId(auth.currentUser?.email?.toLowerCase() || '');
-  const chip0 = document.createElement('button');
-  chip0.className = 'lista-chip' + (currentFamilyId === mainId ? ' active' : '');
-  chip0.innerHTML = '<span class="chip-dot" style="background:#ffeaa7"></span> 👥 Famiglia';
-  chip0.onclick = () => switchToList(mainId);
-  bar.appendChild(chip0);
-  // Chip liste private
-  myListePrivate.forEach(l => {
-    const chip = document.createElement('button');
-    chip.className = 'lista-chip' + (currentFamilyId === l.id ? ' active' : '');
-    chip.innerHTML = '<span class="chip-dot" style="background:#a29bfe"></span> 👤 ' + l.nome;
-    chip.onclick = () => switchToList(l.id);
-    bar.appendChild(chip);
-  });
+  // Non usata più, mantenuta per compatibilità
 }
+
+function buildMembers(familyId) {
+  // Mostra i membri noti di una famiglia
+  const members = [];
+  Object.entries(NAME_MAP).forEach(([email, nome]) => {
+    const fam = FAMILY_MAP[email] || ('famiglia_' + email.split('@')[0]);
+    if (fam === familyId) members.push(nome);
+  });
+  return members;
+}
+
+window.openListeScreen = () => {
+  const scroll = document.getElementById('listeScroll');
+  if (!scroll) return;
+  scroll.innerHTML = '';
+  const email = auth.currentUser?.email?.toLowerCase() || '';
+  const mainId = getFamilyId(email);
+
+  // ── Card famiglia principale ──
+  const members = buildMembers(mainId);
+  const card0 = document.createElement('div');
+  card0.className = 'lista-card' + (currentFamilyId === mainId ? ' active' : '');
+  card0.innerHTML = \`
+    <div class="lista-card-top">
+      <div class="lista-card-icon" style="background:#ffeaa740;">👥</div>
+      <div class="lista-card-info">
+        <div class="lista-card-name">Lista Famiglia</div>
+        <div class="lista-card-sub">\${members.length} \${members.length===1?'membro':'membri'} • Lista principale</div>
+      </div>
+      \${currentFamilyId === mainId ? '<span style="font-size:18px;">✅</span>' : ''}
+    </div>
+    <div class="lista-card-members">
+      \${members.map(m => \`<span class="member-badge\${m===currentUserName?' me':''}">\${m}</span>\`).join('')}
+    </div>\`;
+  card0.onclick = () => { switchToList(mainId); closeListeScreen(); };
+  scroll.appendChild(card0);
+
+  // ── Card liste private ──
+  if (myListePrivate.length > 0) {
+    const sep = document.createElement('div');
+    sep.style.cssText = 'font-size:11px;font-weight:800;color:#b2bec3;text-transform:uppercase;letter-spacing:1px;margin:16px 4px 8px;';
+    sep.textContent = 'Liste private';
+    scroll.appendChild(sep);
+  }
+
+  myListePrivate.forEach(l => {
+    const card = document.createElement('div');
+    card.className = 'lista-card' + (currentFamilyId === l.id ? ' active' : '');
+    card.innerHTML = \`
+      <div class="lista-card-top">
+        <div class="lista-card-icon" style="background:#a29bfe30;">👤</div>
+        <div class="lista-card-info">
+          <div class="lista-card-name">\${l.nome}</div>
+          <div class="lista-card-sub">Lista privata • Solo voi due</div>
+        </div>
+        \${currentFamilyId === l.id ? '<span style="font-size:18px;">✅</span>' : ''}
+      </div>
+      <div class="lista-card-members">
+        <span class="member-badge me">\${currentUserName}</span>
+        \${l.altroNome ? \`<span class="member-badge">\${l.altroNome}</span>\` : ''}
+      </div>\`;
+    card.onclick = () => { switchToList(l.id); closeListeScreen(); };
+    // Tasto elimina
+    const delBtn = document.createElement('button');
+    delBtn.style.cssText = 'display:block;width:100%;margin-top:12px;padding:10px;border:2px solid #ff7675;border-radius:10px;background:white;color:#ff7675;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;';
+    delBtn.textContent = '🗑 Elimina lista';
+    delBtn.onclick = (e) => { e.stopPropagation(); eliminaLista(l.id, l.nome); };
+    card.appendChild(delBtn);
+    scroll.appendChild(card);
+  });
+
+  document.getElementById('listeScreen').classList.add('show');
+};
+
+window.closeListeScreen = () => {
+  document.getElementById('listeScreen').classList.remove('show');
+};
+
+window.toggleMenuPuntini = (e) => {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById('menuPuntini');
+  menu.classList.toggle('show');
+};
+
+// Chiudi menu se clicchi fuori
+document.addEventListener('click', () => {
+  const menu = document.getElementById('menuPuntini');
+  if (menu) menu.classList.remove('show');
+});
+
+window.eliminaLista = async (token, nome) => {
+  if (!confirm('Vuoi eliminare "' + nome + '"? I dati saranno persi.')) return;
+  try {
+    const { ref: dbRef, remove } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
+    await remove(dbRef(db, 'inviti/' + token));
+    await remove(dbRef(db, 'spesa/' + token));
+    myListePrivate = myListePrivate.filter(l => l.id !== token);
+    // Se stavo guardando quella lista, torna alla famiglia
+    if (currentFamilyId === token) {
+      const email = auth.currentUser?.email?.toLowerCase() || '';
+      currentFamilyId = getFamilyId(email);
+      if (dbListener) dbListener();
+      data = [[], [], []];
+      startListening();
+    }
+    showToast('🗑 Lista eliminata');
+    openListeScreen(); // aggiorna la schermata
+  } catch(e) {
+    showToast('❌ Errore eliminazione');
+  }
+};
 
 window.switchToList = (familyId) => {
   if (currentFamilyId === familyId) return;
@@ -1428,7 +1553,7 @@ window.generaLink = async () => {
   if (tipoInvito === 'privato') {
     const nome = document.getElementById('invitoNome').value.trim();
     if (!myListePrivate.find(l => l.id === token)) {
-      myListePrivate.push({ id: token, nome });
+      myListePrivate.push({ id: token, nome, altroNome: '' });
     }
     renderListeBar();
   }
